@@ -76,6 +76,8 @@ class RWKV_TimeMix(nn.Module):
 
         return rwkv * self.time_gamma[:T, :]
 ```
+### AFT
+$$Y\_{t}=\sigma\_{Q}\left(Q\_{t}\right) \odot \frac{\sum_{t^{\prime}=1}^{T} \exp \left(\mathbf{K}\_{t^{\prime}}+w\_{t, t^{\prime}}\right) \odot V\_{t^{\prime}}}{\sum\_{t^{\prime}=1}^{T} \exp \left(\mathbf{K}\_{t^{\prime}}+w\_{t, t^{\prime}}\right)}$$
 ##  Channel-mix
 $$\mathrm{CM}\_{t, c}=\mathrm{sigmoid}\left(R\_{t, c}\right) \cdot \sum_{d} W_{c, d} \cdot \mathrm{gelu}\left(K\_{t, d}\right) \cdot V\_{t, d}$$
 ```python
