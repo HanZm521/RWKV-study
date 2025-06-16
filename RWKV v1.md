@@ -93,6 +93,7 @@ The corresponding code in rwkv:
 ```python
 wkv = (torch.einsum('htu,buhc->bthc', w, kv)).contiguous().view(B, T, -1)
 ```
+More details about AFT can be viewed in the Zhihu article *["详解AFT（Attention Free Transformer）"](https://zhuanlan.zhihu.com/p/680983091)*.
 ##  Channel-mix
 equation:
 
