@@ -1,7 +1,7 @@
 # RWKV-V1
 use explicit decay and Token-shift, AFT.
 ## Time-mix
-$$ \mathrm{TM}\_{t,c} = \mathrm{sigmoid}(R\_{t,c}) \cdot \sum\_{u=1} W\_{t,u,c} \cdot \mathrm{softmax}(K\_{u,c}) \cdot V\_{u,c} $$
+$$ \mathrm{TM}\_{t,c} = \mathrm{sigmoid}(R\_{t,c}) \cdot \sum\_{u} W\_{t,u,c} \cdot \mathrm{softmax}(K\_{u,c}) \cdot V\_{u,c} $$
 ```python
 class RWKV_TimeMix(nn.Module):
     def __init__(self, config, layer_id):
@@ -78,3 +78,33 @@ class RWKV_TimeMix(nn.Module):
 ```
 ##  Channel-mix
 $$\mathrm{CM}\_{t, c}=\mathrm{sigmoid}\left(R\_{t, c}\right) \cdot \sum_{d} W_{c, d} \cdot \mathrm{gelu}\left(K\_{t, d}\right) \cdot V\_{t, d}$$
+```python
+class RWKV_ChannelMix(nn.Module):
+    def __init__(self, config, layer_id):
+        super().__init__()
+        self.layer_id = layer_id
+        self.time_shift = nn.ZeroPad2d((0,0,1,-1))
+        
+        hidden_sz = 5 * config.n_ffn // 2 # can use smaller hidden_sz because of receptance gating
+        self.key = nn.Linear(config.n_embd, hidden_sz)
+        self.value = nn.Linear(config.n_embd, hidden_sz)
+        self.weight = nn.Linear(hidden_sz, config.n_embd)
+        self.receptance = nn.Linear(config.n_embd, config.n_embd)
+
+        self.receptance.scale_init = 0
+        self.weight.scale_init = 0
+
+    def forward(self, x):
+        B, T, C = x.size()
+        
+        x = torch.cat([self.time_shift(x[:, :, :C//2]), x[:, :, C//2:]], dim = -1)
+        k = self.key(x)
+        v = self.value(x)
+        r = self.receptance(x)
+        
+        wkv = self.weight(F.mish(k) * v) # i find mish is a bit better than gelu
+
+        rwkv = torch.sigmoid(r) * wkv
+
+        return rwkv
+```
