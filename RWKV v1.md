@@ -94,12 +94,46 @@ The corresponding code in rwkv:
 wkv = (torch.einsum('htu,buhc->bthc', w, kv)).contiguous().view(B, T, -1)
 ```
 More details about AFT can be viewed in the Zhihu article *["详解AFT（Attention Free Transformer）"](https://zhuanlan.zhihu.com/p/680983091)*.
+
+### Explicit Decay
+Define the attenuation law of weights with time distance directly through mathematical formulas (such as exponential attenuation), rather than relying on the learned implicit patterns.
+
+code: 
+
+```python
+with torch.no_grad(): # initial time_w curves for better convergence
+            ww = torch.ones(config.n_head, config.ctx_len)
+            curve = torch.tensor([-(config.ctx_len - 1 - i) for i in range(config.ctx_len)]) # the distance
+            for h in range(config.n_head):
+                if h < config.n_head - 1:
+                    decay_speed = math.pow(config.ctx_len, -(h+1)/(config.n_head-1))
+                else:
+                    decay_speed = 0.0
+                ww[h] = torch.exp(curve * decay_speed)
+
+w = F.pad(self.time_w, (0, TT))
+        w = torch.tile(w, [TT])
+        w = w[:, :-TT].reshape(-1, TT, 2 * TT - 1)
+        w = w[:, :, TT-1:] # w is now a circulant matrix
+        w = w[:, :T, :T] * self.time_alpha[:, :, :T] * self.time_beta[:, :T, :]
+```
+### Token-shift
+
+
+code:
+
+```python
+x = torch.cat([self.time_shift(x[:, :, :C//2]), x[:, :, C//2:]], dim = -1)
+```
+
+
 ##  Channel-mix
 equation:
 
 $$\mathrm{CM}\_{t, c}=\mathrm{sigmoid}\left(R\_{t, c}\right) \cdot \sum_{d} W_{c, d} \cdot \mathrm{gelu}\left(K\_{t, d}\right) \cdot V\_{t, d}$$
 
 code:
+
 
 ```python
 class RWKV_ChannelMix(nn.Module):
