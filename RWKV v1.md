@@ -1,9 +1,13 @@
 # RWKV-V1
 RWKV-V1 uses the long volume product instead of the Attention mechanism, and its architecture consists of alternating Time-mix and Channel-mix. Channel-mix is a variant of the GeGLU layer of the Transformer. Time-mix is a significant improvement of AFT.
 ## Time-mix
+
 equation:
+
 $$ \mathrm{TM}\_{t,c} = \mathrm{sigmoid}(R\_{t,c}) \cdot \sum\_{u} W\_{t,u,c} \cdot \mathrm{softmax}(K\_{u,c}) \cdot V\_{u,c} $$
+
 code:
+
 ```python
 class RWKV_TimeMix(nn.Module):
     def __init__(self, config, layer_id):
