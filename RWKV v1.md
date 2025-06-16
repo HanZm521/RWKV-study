@@ -2,5 +2,6 @@
 use explicit decay and Token-shift, AFT.
 ## Time-mix
 $$
-<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>T</mi><msub><mi>M</mi><mrow><mi>t</mi><mo>,</mo><mi>c</mi></mrow></msub><mo>=</mo><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mrow><mo stretchy="false">(</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>,</mo><mi>c</mi></mrow></msub><mo stretchy="false">)</mo><mo>⋅</mo><munderover><mo data-mjx-texclass="OP">∑</mo><mrow><mi>u</mi></mrow><mrow></mrow></munderover><msub><mi>W</mi><mrow><mi>t</mi><mo>,</mo><mi>u</mi><mo>,</mo><mi>c</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow><mi>t</mi></msub><mo stretchy="false">(</mo><msub><mi>K</mi><mrow><mi>u</mi><mo>,</mo><mi>c</mi></mrow></msub><mo stretchy="false">)</mo><mo>⋅</mo><msub><mi>V</mi><mrow><mi>u</mi><mo>,</mo><mi>c</mi></mrow></msub></math>
+TM_{t,c} =\mathrm{sigmoid}(R_{t,c})\cdot \sum_{u}^{} W_{t,u,c} \cdot \mathrm{softmax}_t(K_{u,c})\cdot V_{u,c}
 $$
+$\displaystyle\sum_{n=1}^{\infty}x_n$
