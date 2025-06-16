@@ -87,7 +87,7 @@ $$Y\_{t}=\sigma\_{Q}\left(Q\_{t}\right) \odot \frac{\sum_{t^{\prime}=1}^{T} \exp
 
 Parallelization:
 
-$$\sum\_{t^{\prime}=1}^{T}\mathrm{exp}({\mathbf{K}}\_{t^{\prime}}+w\_{t,t^{\prime}})=\exp(w\_{t})\times(\exp(\mathbf{K})$$
+$$\sum\_{t^{\prime}=1}^{T}\mathrm{exp}({\mathbf{K}}\_{t^{\prime}}+w\_{t,t^{\prime}})=\exp(w\_{t})\times\exp(\mathbf{K})$$
 
 ##  Channel-mix
 equation:
