@@ -2,5 +2,5 @@
 use explicit decay and Token-shift, AFT.
 ## Time-mix
 $$
-\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}
+\mathrm{TM}_{t,c}=\mathrm{sigmoid}\left(R_{t,c}\right)\cdot\sum_{u}W_{t,u,c}\cdot\mathrm{softmax}_{t}\left(K_{u,c}\right)\cdot V_{u,c}
 $$
