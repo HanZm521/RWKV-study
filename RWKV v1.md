@@ -85,6 +85,10 @@ equation:
 
 $$Y\_{t}=\sigma\_{Q}\left(Q\_{t}\right) \odot \frac{\sum_{t^{\prime}=1}^{T} \exp \left(\mathbf{K}\_{t^{\prime}}+w\_{t, t^{\prime}}\right) \odot V\_{t^{\prime}}}{\sum\_{t^{\prime}=1}^{T} \exp \left(\mathbf{K}\_{t^{\prime}}+w\_{t, t^{\prime}}\right)}$$
 
+Parallelization:
+
+$$\sum\_{t^{\prime}=1}^{T}\mathrm{exp}({\mathbf{K}}\_{t^{\prime}}+w\_{t,t^{\prime}})\odot V\_{t^{\prime}}=\exp(w\_{t})\times(\exp(\mathbf{K})\odot$$
+
 ##  Channel-mix
 equation:
 
