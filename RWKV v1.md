@@ -1,7 +1,9 @@
 # RWKV-V1
 RWKV-V1 uses the long volume product instead of the Attention mechanism, and its architecture consists of alternating Time-mix and Channel-mix. Channel-mix is a variant of the GeGLU layer of the Transformer. Time-mix is a significant improvement of AFT.
 ## Time-mix
+equation:
 $$ \mathrm{TM}\_{t,c} = \mathrm{sigmoid}(R\_{t,c}) \cdot \sum\_{u} W\_{t,u,c} \cdot \mathrm{softmax}(K\_{u,c}) \cdot V\_{u,c} $$
+code:
 ```python
 class RWKV_TimeMix(nn.Module):
     def __init__(self, config, layer_id):
@@ -77,9 +79,12 @@ class RWKV_TimeMix(nn.Module):
         return rwkv * self.time_gamma[:T, :]
 ```
 ### AFT
+equation:
 $$Y\_{t}=\sigma\_{Q}\left(Q\_{t}\right) \odot \frac{\sum_{t^{\prime}=1}^{T} \exp \left(\mathbf{K}\_{t^{\prime}}+w\_{t, t^{\prime}}\right) \odot V\_{t^{\prime}}}{\sum\_{t^{\prime}=1}^{T} \exp \left(\mathbf{K}\_{t^{\prime}}+w\_{t, t^{\prime}}\right)}$$
 ##  Channel-mix
+equation:
 $$\mathrm{CM}\_{t, c}=\mathrm{sigmoid}\left(R\_{t, c}\right) \cdot \sum_{d} W_{c, d} \cdot \mathrm{gelu}\left(K\_{t, d}\right) \cdot V\_{t, d}$$
+code:
 ```python
 class RWKV_ChannelMix(nn.Module):
     def __init__(self, config, layer_id):
