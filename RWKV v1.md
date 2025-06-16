@@ -89,6 +89,10 @@ Parallelization:
 
 $$\sum\_{t^{\prime}=1}^{T}\mathrm{exp}({\mathbf{K}}\_{t^{\prime}}+w\_{t,t^{\prime}})=\exp(w\_{t})\times\exp(\mathbf{K})$$
 
+The corresponding code in rwkv:
+```python
+wkv = (torch.einsum('htu,buhc->bthc', w, kv)).contiguous().view(B, T, -1)
+```
 ##  Channel-mix
 equation:
 
