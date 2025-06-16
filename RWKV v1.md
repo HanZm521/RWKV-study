@@ -77,4 +77,4 @@ class RWKV_TimeMix(nn.Module):
         return rwkv * self.time_gamma[:T, :]
 ```
 ##  Channel-mix
-$$\mathrm{CM}\_{t, c}=\operatorname{sigmoid}\left(R\_{t, c}\right) \cdot \sum_{d} W_{c, d} \cdot \operatorname{gelu}\left(K\_{t, d}\right) \cdot V\_{t, d}$$
+$$\mathrm{CM}\_{t, c}=\mathrm{sigmoid}\left(R\_{t, c}\right) \cdot \sum_{d} W_{c, d} \cdot \mathrm{gelu}\left(K\_{t, d}\right) \cdot V\_{t, d}$$
