@@ -152,7 +152,7 @@ x = x * self.time_mix + self.time_shift(x) * (1 - self.time_mix)
 ```
 $$ 
 \begin{array}{c}
-k\_{1}=\operatorname{reluSquare}\left(K \cdot z\_{1}\right) \\
+k\_{1}=\mathrm{reluSquare}\left(K \cdot z\_{1}\right) \\
 v\_{1}=V \cdot k\_{1} \\
 r\_{1}=\mathrm{sigmoid}\left(R \cdot z\_{1}\right)
 \end{array}
