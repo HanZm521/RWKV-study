@@ -81,28 +81,38 @@ __global__ void kernel_forward(const int B, const int T, const int C,
     const int _c = idx % C;
     const int _offset = _b * T * C + _c;
 
-    F u = _u[_c];
-    F w = _w[_c];
+    F u = _u[_c]; // time_first parameter
+    F w = _w[_c]; // time_decay parameter
     const F *__restrict__ const k = _k + _offset;
     const F *__restrict__ const v = _v + _offset;
     F *__restrict__ const y = _y + _offset;
 
-    F p = 0, q = 0, o = MIN_VALUE;
+    F p = 0, q = 0, o = MIN_VALUE; // p: numerator state, q: denominator state, o: max exponent for numerical stability
     // p and q are running sums divided by exp(o) (to avoid overflows)
     for (int i = 0; i < T; i++) {
-        const int ii = i * C;
+        const int ii = i * C; // Stride to access k_i, v_i, y_i for the current channel
 
-        F no = max(o, u + k[ii]);
-        F A = exp(o - no);
-        F B = exp(u + k[ii] - no);
-        y[ii] = (A * p + B * v[ii]) / (A * q + B);
+        // 1. Calculate output y[i] for current timestep i
+        //    o_prev is the 'o' from the previous iteration.
+        //    p_prev is the 'p' from the previous iteration.
+        //    q_prev is the 'q' from the previous iteration.
+        //    k[ii] is k_i for the current timestep.
+        //    v[ii] is v_i for the current timestep.
+        F no = max(o, u + k[ii]);      // no = max(o_prev, time_first + k_i); New max exponent for y_i calculation.
+        F A = exp(o - no);            // A = exp(o_prev - no); Factor to scale down previous state (p_prev, q_prev). Corresponds to alpha_i.
+        F B = exp(u + k[ii] - no);    // B = exp(time_first + k_i - no); Factor for current value v_i. Corresponds to beta_i.
+        y[ii] = (A * p + B * v[ii]) / (A * q + B); // y_i = (A*p_prev + B*v_i) / (A*q_prev + B); Compute current output.
 
-        no = max(w + o, k[ii]);
-        A = exp(w + o - no);
-        B = exp(k[ii] - no);
-        p = A * p + B * v[ii];
-        q = A * q + B;
-        o = no;
+        // 2. Update recurrent state (p, q, o) for the next timestep (i+1)
+        //    o_prev is still the 'o' from before the y_i calculation.
+        //    p_prev is still the 'p' from before the y_i calculation.
+        //    q_prev is still the 'q' from before the y_i calculation.
+        no = max(w + o, k[ii]);       // o_next = max(time_decay + o_prev, k_i); New max exponent for state update.
+        A = exp(w + o - no);          // A_state = exp(time_decay + o_prev - o_next); Factor to scale down previous state for next step. Corresponds to alpha_prime_i.
+        B = exp(k[ii] - no);          // B_state = exp(k_i - o_next); Factor for current value's contribution to next state. Corresponds to beta_prime_i.
+        p = A * p + B * v[ii];        // p_next = A_state*p_prev + B_state*v_i; Update numerator state.
+        q = A * q + B;                // q_next = A_state*q_prev + B_state; Update denominator state (B_state * 1 implicitly).
+        o = no;                       // o_prev becomes o_next for the next iteration.
     }
 }
 ```
