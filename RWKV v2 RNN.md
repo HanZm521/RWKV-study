@@ -6,4 +6,15 @@ $$x\_{1}=\mathrm{LN}\left(x\_{1}\right)$$
 ```python
 self.ln1 = nn.LayerNorm(config.n_embd)
 ```
+$$z_{1}=T \odot x_{0}+(1-T) \odot x_{1}$$
+```python
+x = x * self.time_mix + self.time_shift(x) * (1 - self.time_mix)
+```
+$$
+\begin{array}{c}
+k\_{1}=\exp \left(K \cdot z\_{1}\right) \\
+v\_{1}=V \cdot z\_{1} \\
+r\_{1}=\operatorname{sigmoid}\left(R \cdot z\_{1}\right)
+\end{array}
+$$
 ## Channel-mix
