@@ -37,4 +37,12 @@ r = self.receptance(x) # r = torch.sigmoid(r)
 k = torch.clamp(k, max=RWKV_K_CLAMP)
 k = torch.exp(k)
 ```
+$$
+\begin{array}{c}
+c\_{1}=a\_{0}+X \odot k\_{1} \odot v\_{1} \\
+d\_{1}=b\_{0}+X \odot k\_{1} \\
+a\_{1}=W \odot a_{0}+k\_{1} \odot v\_{1} \\
+b\_{1}=W \odot b_{0}+k\_{1}
+\end{array}
+$$
 ## Channel-mix
