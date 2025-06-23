@@ -36,4 +36,5 @@ v = self.value(x).transpose(-1, -2)
 r = self.receptance(x) # r1 = torch.sigmoid(r)
 k = torch.clamp(k, max=RWKV_K_CLAMP)
 k = torch.exp(k)
+```
 ## Channel-mix
