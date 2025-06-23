@@ -27,4 +27,13 @@ r\_{1}=\mathrm{sigmoid}\left(R \cdot z\_{1}\right)
 \end{array}
 $$
 ```python
+self.key = nn.Linear(config.n_embd, attn_sz, bias=False)
+self.value = nn.Linear(config.n_embd, attn_sz, bias=False)
+self.receptance = nn.Linear(config.n_embd, attn_sz, bias=False)
+
+k = self.key(x).transpose(-1, -2)
+v = self.value(x).transpose(-1, -2)
+r = self.receptance(x) # r1 = torch.sigmoid(r)
+k = torch.clamp(k, max=RWKV_K_CLAMP)
+k = torch.exp(k)
 ## Channel-mix
