@@ -12,5 +12,6 @@ w k v\_{t}=\mathrm{diag}(u) \cdot k\_{t}^{\top} \cdot v\_{t}+\sum\_{i=1}^{t-1} \
 o\_{t}=\mathrm{concat}\left(\mathrm{SiLU}\left(g\_{t}\right) \odot \mathrm{LayerNorm}\left(r\_{t} \cdot w k v\_{t}\right)\right) W\_{o} \in \mathbb{R}^{D}
 \end{array}
 $$
+
 code:
 
