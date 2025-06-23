@@ -10,7 +10,7 @@ x = self.ln1(x)
 ```
 $$z_{1}=T \odot x_{0}+(1-T) \odot x_{1}$$
 ```python
-self.time_shift = nn.ZeroPad2d((0, 0, 1, -1))
+self.time_shift = nn.ZeroPad2d((0, 0, 1, -1)) # This is a special fill operation used to shift the input sequence forward by one step in the time dimension (T).
         with torch.no_grad():  # init to "shift half of the channels"
             ww = torch.ones(1, 1, config.n_embd)
             for i in range(config.n_embd // 2):
