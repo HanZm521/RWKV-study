@@ -81,7 +81,41 @@ wkv = TimeX.apply(w, kv, B, C, T, 0)
 # RWKV_K_EPS can be removed if the CUDA kernel sets 0/0 = 0 (I will do this later)
 wk = TimeX.apply(w, k, B, C, T, RWKV_K_EPS)
 ```
-TimeX.apply()
+TimeX.apply() 
+```python
+timex_cuda = load(name="timex", sources=["cuda/timex_op.cpp", "cuda/timex_cuda.cu"],
+                  verbose=True, extra_cuda_cflags=['--use_fast_math', '--extra-device-vectorization', f'-DTmax={T_MAX}', f'-DBF={B_GROUP_FORWARD}', f'-DBB={B_GROUP_BACKWARD}'])
+
+
+class TimeX(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, w, k, B, C, T, eps):
+        ctx.B = B
+        ctx.C = C
+        ctx.T = T
+        assert ctx.T % 4 == 0 and ctx.T <= T_MAX and ctx.B % B_GROUP_FORWARD == 0 and ctx.B % B_GROUP_BACKWARD == 0
+        w = w.contiguous()
+        k = k.contiguous()
+        ctx.save_for_backward(w, k)
+        wk = torch.empty((B, C, T), device='cuda',
+                         memory_format=torch.contiguous_format)
+        timex_cuda.forward(w, k, wk, eps, B, C, T)
+        return wk
+
+    @staticmethod
+    def backward(ctx, gwk):
+        assert ctx.T % 4 == 0 and ctx.T <= T_MAX and ctx.B % B_GROUP_FORWARD == 0 and ctx.B % B_GROUP_BACKWARD == 0
+        w, k = ctx.saved_tensors
+        gw = torch.empty((ctx.B, ctx.C, ctx.T), device='cuda',
+                         memory_format=torch.contiguous_format)
+        gk = torch.empty((ctx.B, ctx.C, ctx.T), device='cuda',
+                         memory_format=torch.contiguous_format)
+        timex_cuda.backward(w, k, gwk.contiguous(), gw,
+                            gk, ctx.B, ctx.C, ctx.T)
+        return (gw.sum(dim=0), gk, None, None, None, None)
+```
+
+#cuda
 ```C
 #define F4(A, B) ((float4 *)(A))[(B) >> 2]
 
