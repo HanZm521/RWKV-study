@@ -14,7 +14,7 @@ $$
 \begin{array}{c}
 k\_{1}=\exp \left(K \cdot z\_{1}\right) \\
 v\_{1}=V \cdot z\_{1} \\
-r\_{1}=\operatorname{sigmoid}\left(R \cdot z\_{1}\right)
+r\_{1}=\mathrm{sigmoid}\left(R \cdot z\_{1}\right)
 \end{array}
 $$
 ## Channel-mix
