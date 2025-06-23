@@ -1,5 +1,5 @@
 ## RWKV-V4
-![image](https://rwkv.cn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Frwkv-architecture-for-language-modeling.dd136ff1.jpg&w=3840&q=75)
+![image](https://rwkv.cn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Frwkv-4-architecure.34426b02.png&w=3840&q=75)
 # Time-mix
 from RWKV-V3
 ```python
