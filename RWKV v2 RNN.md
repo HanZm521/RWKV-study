@@ -81,7 +81,7 @@ wkv = TimeX.apply(w, kv, B, C, T, 0)
 # RWKV_K_EPS can be removed if the CUDA kernel sets 0/0 = 0 (I will do this later)
 wk = TimeX.apply(w, k, B, C, T, RWKV_K_EPS)
 ```
-TimeX.apply
+TimeX.apply()
 ```C
 #define F4(A, B) ((float4 *)(A))[(B) >> 2]
 
@@ -131,7 +131,39 @@ __global__ void kernel_forward(const F *__restrict__ const __w, const F *__restr
     }
 }
 ```
-
+$$ \begin{array}{c}
+y\_{1}=c\_{1} / d\_{1} \\
+y\_{1}=P \cdot\left(r\_{1} \odot y\_{1}\right)
+\end{array} 
+$$
+```python
+rwkv = torch.sigmoid(r) * (wkv / wk).transpose(-1, -2)
+```
 
 ## Channel-mix
 $$ x\_{1}=\mathrm{LN}\left(x\_{1}\right) $$
+```python
+self.ln2 = nn.LayerNorm(config.n_embd)
+x = self.ln2(x)
+```
+$$ z\_{1}=T \odot x\_{0}+(1-T) \odot x\_{1} $$
+```python
+x = x * self.time_mix + self.time_shift(x) * (1 - self.time_mix)
+```
+$$ 
+\begin{array}{c}
+k\_{1}=\operatorname{reluSquare}\left(K \cdot z\_{1}\right) \\
+v\_{1}=V \cdot k\_{1} \\
+r\_{1}=\mathrm{sigmoid}\left(R \cdot z\_{1}\right)
+\end{array}
+$$
+```python
+self.key = nn.Linear(config.n_embd, hidden_sz, bias=False)
+self.receptance = nn.Linear(config.n_embd, config.n_embd, bias=False)
+self.value = nn.Linear(hidden_sz, config.n_embd, bias=False)
+
+k = self.key(x)
+k = torch.square(torch.relu(k))
+kv = self.value(k)
+rkv = torch.sigmoid(self.receptance(x)) * kv
+```
