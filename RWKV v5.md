@@ -3,6 +3,7 @@ Compared with RWKV-V4, the most significant change of RWKV-V5 lies in the introd
 ![image](https://rwkv.cn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Frwkv-5-6-architecture.eb7a9d99.png&w=3840&q=75)
 # Time-mix
 equal:
+
 $$
 \begin{array}{c}
 \square\_{t}=\mathrm{lerp}\_{\square}\left(x\_{t}, x\_{t-1}\right) W\_{\square}, \quad \square \in\{r, k, v, g\} \\
@@ -12,3 +13,4 @@ o\_{t}=\mathrm{concat}\left(\mathrm{SiLU}\left(g\_{t}\right) \odot \mathrm{Layer
 \end{array}
 $$
 code:
+
