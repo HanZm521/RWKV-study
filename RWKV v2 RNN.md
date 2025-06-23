@@ -81,6 +81,57 @@ wkv = TimeX.apply(w, kv, B, C, T, 0)
 # RWKV_K_EPS can be removed if the CUDA kernel sets 0/0 = 0 (I will do this later)
 wk = TimeX.apply(w, k, B, C, T, RWKV_K_EPS)
 ```
+TimeX.apply
+```C
+#define F4(A, B) ((float4 *)(A))[(B) >> 2]
+
+template <typename F>
+__global__ void kernel_forward(const F *__restrict__ const __w, const F *__restrict__ const __k, F *__restrict__ const x,
+                               const F eps, const int B, const int C, const int T) {
+    const int i = blockIdx.y;
+    const int ij = (B * C) / BF;
+    const int t = threadIdx.x << 2;
+
+    __shared__ F ww[Tmax];
+    __shared__ F kk[Tmax * BF];
+    F4(ww, t) = F4(__w, t + T * (i % C));
+    
+    #pragma unroll
+    for (int j = 0; j < BF; j++) {
+        F4(kk, t + Tmax * j) = F4(__k, t + T * (i + ij * j));
+    }
+    __syncthreads();
+
+    float4 s[BF];
+    #pragma unroll
+    for (int j = 0; j < BF; j++) {
+        s[j] = {eps, eps, eps, eps};
+    }
+    const F *__restrict__ const w = ww + T - t - 4;
+    for (int u = 0; u <= t; u++) {
+        #pragma unroll
+        for (int j = 0; j < BF; j++) {
+            const F x = kk[u + Tmax * j];
+            s[j].x += w[u + 3] * x;
+            s[j].y += w[u + 2] * x;
+            s[j].z += w[u + 1] * x;
+            s[j].w += w[u + 0] * x;
+        }
+    }
+    #pragma unroll
+    for (int j = 0; j < BF; j++) {
+        const F *__restrict__ const k = kk + Tmax * j;
+        s[j].y += w[t + 3] * k[t + 1];
+        s[j].z += w[t + 2] * k[t + 1];
+        s[j].z += w[t + 3] * k[t + 2];
+        s[j].w += w[t + 1] * k[t + 1];
+        s[j].w += w[t + 2] * k[t + 2];
+        s[j].w += w[t + 3] * k[t + 3];
+        F4(x, t + T * (i + ij * j)) = s[j];
+    }
+}
+```
 
 
 ## Channel-mix
+$$ x\_{1}=\mathrm{LN}\left(x\_{1}\right) $$
