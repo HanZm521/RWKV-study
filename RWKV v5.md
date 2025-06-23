@@ -4,9 +4,9 @@ Compared with RWKV-V4, the most significant change of RWKV-V5 lies in the introd
 # Time-mix
 $$
 \begin{array}{c}
-\square\_{t}=\operatorname{lerp}\_{\square}\left(x\_{t}, x\_{t-1}\right) W\_{\square}, \quad \square \in\{r, k, v, g\} \\
+\square\_{t}=\mathrm{lerp}\_{\square}\left(x\_{t}, x\_{t-1}\right) W\_{\square}, \quad \square \in\{r, k, v, g\} \\
 w=\exp (-\exp (\omega)) \\
-w k v\_{t}=\operatorname{diag}(u) \cdot k\_{t}^{\top} \cdot v\_{t}+\sum\_{i=1}^{t-1} \operatorname{diag}(w)^{t-1-i} \cdot k\_{i}^{\top} \cdot v\_{i} \in \mathbb{R}^{(D / h) \times(D / h)} \\
-o\_{t}=\operatorname{concat}\left(\operatorname{SiLU}\left(g\_{t}\right) \odot \operatorname{LayerNorm}\left(r\_{t} \cdot w k v\_{t}\right)\right) W\_{o} \in \mathbb{R}^{D}
+w k v\_{t}=\mathrm{diag}(u) \cdot k\_{t}^{\top} \cdot v\_{t}+\sum\_{i=1}^{t-1} \mathrm{diag}(w)^{t-1-i} \cdot k\_{i}^{\top} \cdot v\_{i} \in \mathbb{R}^{(D / h) \times(D / h)} \\
+o\_{t}=\mathrm{concat}\left(\mathrm{SiLU}\left(g\_{t}\right) \odot \mathrm{LayerNorm}\left(r\_{t} \cdot w k v\_{t}\right)\right) W\_{o} \in \mathbb{R}^{D}
 \end{array}
 $$
