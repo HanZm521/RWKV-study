@@ -1,5 +1,6 @@
 ## RWKV-V4
 ![image](https://rwkv.cn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Frwkv-4-architecure.34426b02.png&w=3840&q=75)
+![image](https://github.com/HanZm521/RWKV-study/blob/main/fig/rwkv4.png?raw=true)
 # Time-mix
 from RWKV-V3
 ```python
