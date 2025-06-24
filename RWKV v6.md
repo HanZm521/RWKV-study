@@ -55,4 +55,16 @@ xr = x + xx * (self.time_maa_r + mr)
 xg = x + xx * (self.time_maa_g + mg)
 ```
 
+The $w\_{t}$ of RWKV-V6 is not static throughout the sequence. This is the core change of the attenuation of RWKV-V6:
+$$
+\begin{array}{c}
+\square\_{t}=\mathrm{ddlerp}\_{\square}\left(x\_{t}, x\_{t-1}\right) W\_{\square}, \quad \square \in\{r, k, v, g\} \\
+d\_{t}=\mathrm{lora}\_{d}\left(\mathrm{ddlerp}\_{d}\left(x\_{t}, x\_{t-1}\right)\right) \\
+w\_{t}=\exp \left(-\exp \left(d\_{t}\right)\right)
+\end{array}
+$$
 
+```python
+ww = torch.tanh(xw @ self.time_decay_w1) @ self.time_decay_w2
+w = self.time_decay + ww
+```
