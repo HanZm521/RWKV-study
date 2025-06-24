@@ -2,6 +2,7 @@
 Compared with RWKV-V4, the most significant change of RWKV-V5 lies in the introduction of multi-headed matrix-valued states, namely "multi-headed matrix-valued states" in the paper.
 ![image](https://rwkv.cn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Frwkv-5-6-architecture.eb7a9d99.png&w=3840&q=75)
 # Time-mix
+RWKV-V5 eliminates the normalization term (the denominator in the RWKV-V4 formula) and introduces the matrix value state instead of the previous vector value state.
 equal:
 
 $$
@@ -13,5 +14,22 @@ o\_{t}=\mathrm{concat}\left(\mathrm{SiLU}\left(g\_{t}\right) \odot \mathrm{Layer
 \end{array}
 $$
 
+multi-headed:
+
 code:
+```python
+self.head_size = args.head_size_a
+assert HEAD_SIZE == self.head_size # change HEAD_SIZE to match args.head_size_a
+self.n_head = args.dim_att // self.head_size
+```
+
+Gate control mechanism:
+```python
+self.gate = nn.Linear(args.n_embd, args.dim_att, bias=False)
+self.ln_x = nn.GroupNorm(self.n_head, args.dim_att)
+
+g = F.silu(self.gate(xg))
+
+x = self.output(x * g)
+```
 
