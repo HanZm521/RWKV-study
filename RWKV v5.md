@@ -1,6 +1,7 @@
 ## RWKV-V5
 Compared with RWKV-V4, the most significant change of RWKV-V5 lies in the introduction of multi-headed matrix-valued states, namely "multi-headed matrix-valued states" in the paper.
 ![image](https://rwkv.cn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Frwkv-5-6-architecture.eb7a9d99.png&w=3840&q=75)
+![image](https://github.com/HanZm521/RWKV-study/blob/main/fig/rwkv5.png?raw=true)
 # Time-mix
 RWKV-V5 eliminates the normalization term (the denominator in the RWKV-V4 formula) and introduces the matrix value state instead of the previous vector value state.
 equal:
