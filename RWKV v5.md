@@ -33,6 +33,7 @@ x = self.output(x * g)
 ```
 
 Diagonal parameterization:
+
 w and u are directly stored as vectors of [H, N], rather than matrices of [H, N, N]
 
 ```C
