@@ -13,6 +13,7 @@ w k v\_{t}=\mathrm{diag}(u) \cdot k\_{t}^{\top} \cdot v\_{t}+\sum\_{i=1}^{t-1} \
 o\_{t}=\mathrm{concat}\left(\mathrm{SiLU}\left(g\_{t}\right) \odot \mathrm{LayerNorm}\left(r\_{t} \cdot w k v\_{t}\right)\right) W\_{o} \in \mathbb{R}^{D}
 \end{array}
 $$
+
 ![image](https://github.com/HanZm521/RWKV-study/blob/main/fig/rwkv5.png?raw=true)
 multi-headed:
 
