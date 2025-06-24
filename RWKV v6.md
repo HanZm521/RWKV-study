@@ -41,17 +41,6 @@ xw = x + xx * (self.time_maa_w + mw)
 xk = x + xx * (self.time_maa_k + mk)
 xv = x + xx * (self.time_maa_v + mv)
 xr = x + xx * (self.time_maa_r + mr)
-xg = x + xx * (self.time_maa_g + mg)        xx = self.time_shift(x) - x
-
-xxx = x + xx * self.time_maa_x
-xxx = torch.tanh(xxx @ self.time_maa_w1).view(B*T, 5, -1).transpose(0, 1)
-xxx = torch.bmm(xxx, self.time_maa_w2).view(5, B, T, -1)
-mw, mk, mv, mr, mg = xxx.unbind(dim=0)
-
-xw = x + xx * (self.time_maa_w + mw)
-xk = x + xx * (self.time_maa_k + mk)
-xv = x + xx * (self.time_maa_v + mv)
-xr = x + xx * (self.time_maa_r + mr)
 xg = x + xx * (self.time_maa_g + mg)
 ```
 
