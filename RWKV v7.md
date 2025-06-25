@@ -21,8 +21,11 @@ $$
 \frac{\partial L}{\partial S}=S k^{\top} k-v^{\top} k
 $$
 
-Equivalent to:
+equivalent to:
 
 $$
 S\_{t}=S\_{t-1}\left(\mathrm{diag}\left(w\_{t}\right)-k\_{t}^{\top} k\_{t} \mathrm{diag}\left(\eta\_{t}\right)\right)+v\_{t}^{\top} k\_{t} \mathrm{diag}\left(\eta\_{t}\right)
 $$
+
+Comparison of the time step formula and status update mechanism between RWKV-V7 and the historical version (RWKV-5/6):
+![image](https://github.com/HanZm521/RWKV-study/blob/main/fig/rwkv7.png)
