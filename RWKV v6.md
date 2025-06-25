@@ -44,6 +44,8 @@ xr = x + xx * (self.time_maa_r + mr)
 xg = x + xx * (self.time_maa_g + mg)
 ```
 
+# Time-mix
+
 The $w\_{t}$ of RWKV-V6 is not static throughout the sequence. This is the core change of the attenuation of RWKV-V6:
 
 $$
@@ -67,3 +69,5 @@ w k v^{\prime}=s+\mathrm{diag}(u) \cdot k^{\mathrm{T}} \cdot v \\
 s^{\prime}=\mathrm{diag}(w) \cdot s+k^{\mathrm{T}} \cdot v
 \end{array}
 $$
+
+
