@@ -16,4 +16,13 @@ $$
 This allows the model to continuously train the internal approximation $v \approx k S^{\top}$.
 
 The gradient formula of state:
+
 $$ 
+\frac{\partial L}{\partial S}=S k^{\top} k-v^{\top} k
+$$
+
+Equivalent to:
+
+$$
+S\_{t}=S\_{t-1}\left(\operatorname{diag}\left(w\_{t}\right)-k\_{t}^{\top} k\_{t} \operatorname{diag}\left(\eta\_{t}\right)\right)+v\_{t}^{\top} k\_{t} \operatorname{diag}\left(\eta\_{t}\right)
+$$
