@@ -71,7 +71,9 @@ s^{\prime}=\mathrm{diag}(w) \cdot s+k^{\mathrm{T}} \cdot v
 $$
 
 Unlike RWKV-V5, the $w\_{t}$ of RWKV-V6 is not static throughout the sequence. This is the core change of RWKV-V6 attenuation: Each channel of $w\_{t}$ can change independently according to the data dependency, while previously it was a fixed learning vector.
+
 (There is almost no difference in the actual cuda implementation.)
+
 code:
 
 ```C
