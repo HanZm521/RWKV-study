@@ -29,3 +29,29 @@ $$
 
 Comparison of the time step formula and status update mechanism between RWKV-V7 and the historical version (RWKV-5/6):
 ![image](https://github.com/HanZm521/RWKV-study/blob/main/fig/rwkv7.png)
+
+code:
+
+```python
+def ref_fwd(r, w, k, v, a, b):
+    r = r.view(B, T, H, N)
+    k = k.view(B, T, H, N)
+    v = v.view(B, T, H, N)
+    a = a.view(B, T, H, N)
+    b = b.view(B, T, H, N)
+    w = torch.exp(-torch.exp(w.view(B, T, H, N)))
+    out = torch.zeros((B, T, H, N), device=DEVICE)
+    state = torch.zeros((B, H, N, N), device=DEVICE)
+ 
+    for t in range(T):
+        kk = k[:, t, :]
+        rr = r[:, t, :]
+        vv = v[:, t, :]
+        aa = a[:, t, :]
+        bb = b[:, t, :]
+        sab = torch.einsum('bhik,bhk,bhj->bhij', state, aa, bb)
+        state = state * w[: , t, :, None, :] + sab + torch.einsum('bhj,bhi->bhij', kk, vv)
+        out[:, t, :] = torch.einsum('bhj,bhij->bhi', rr, state)
+ 
+    return out.view((B, T, C))
+```
