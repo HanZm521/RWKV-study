@@ -24,5 +24,5 @@ $$
 Equivalent to:
 
 $$
-S\_{t}=S\_{t-1}\left(\operatorname{diag}\left(w\_{t}\right)-k\_{t}^{\top} k\_{t} \operatorname{diag}\left(\eta\_{t}\right)\right)+v\_{t}^{\top} k\_{t} \operatorname{diag}\left(\eta\_{t}\right)
+S\_{t}=S\_{t-1}\left(\mathrm{diag}\left(w\_{t}\right)-k\_{t}^{\top} k\_{t} \mathrm{diag}\left(\eta\_{t}\right)\right)+v\_{t}^{\top} k\_{t} \mathrm{diag}\left(\eta\_{t}\right)
 $$
