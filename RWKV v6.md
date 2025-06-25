@@ -58,3 +58,12 @@ $$
 ww = torch.tanh(xw @ self.time_decay_w1) @ self.time_decay_w2
 w = self.time_decay + ww
 ```
+
+$$
+\begin{array}{c}
+w k v\_{t}=\mathrm{diag}(u) \cdot k\_{t}^{\mathrm{T}} \cdot v\_{t}+\sum\_{i=1}^{t-1} \mathrm{diag}\left(\bigodot\_{j=1}^{i-1} w\_{j}\right) \cdot k\_{i}^{\mathrm{T}} \cdot v\_{i} \in \mathbb{R}^{(D / h) \times(D / h)} \\
+o\_{t}=\mathrm{concat}\left(\mathrm{SiLU}\left(g\_{t}\right) \odot \mathrm{LayerNorm}\left(r\_{t} \cdot w k v\_{t}\right)\right) W\_{o} \in \mathbb{R}^{D} \\
+w k v^{\prime}=s+\mathrm{diag}(u) \cdot k^{\mathrm{T}} \cdot v \\
+s^{\prime}=\mathrm{diag}(w) \cdot s+k^{\mathrm{T}} \cdot v
+\end{array}
+$$
