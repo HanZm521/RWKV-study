@@ -14,3 +14,6 @@ L=\frac{1}{2}\left\|v-k S^{\top}\right\|^{2}
 $$
 
 This allows the model to continuously train the internal approximation $v \approx k S^{\top}$.
+
+The gradient formula of state:
+$$ 
