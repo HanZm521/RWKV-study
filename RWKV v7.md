@@ -56,6 +56,9 @@ def ref_fwd(r, w, k, v, a, b):
     return out.view((B, T, C))
 ```
 
+cuda:
+
+
 ```C
 using bf = __nv_bfloat16;
 __device__ inline float to_float(const bf & u) { return __bfloat162float(u); }
